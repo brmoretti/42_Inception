@@ -10,10 +10,41 @@ services:
     volumes:
       - mariadb_volume:/var/lib/mysql
     environment:
-      - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
+  wordpress:
+    container_name: wordpress
+    build: requirements/wordpress
+    restart: always
+    ports:
+      - 9000:9000
+    volumes:
+      - wordpress_volume:/var/www/html
+    environment:
+      - WORDPRESS_DB_HOST=mariadb:3306
+      - WORDPRESS_DB_USER=${MYSQL_USER}
+      - WORDPRESS_DB_PASSWORD=${MYSQL_PASSWORD}
+      - WORDPRESS_DB_NAME=${MYSQL_DATABASE}
+
+  nginx:
+    container_name: nginx
+    build: requirements/nginx
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - wordpress_volume:/var/www/html
+      - ./requirements/nginx/ssl:/etc/ssl/certs
+    environment:
+      - DOMAIN=${DOMAIN}
 
 volumes:
   mariadb_volume:
+  wordpress_volume:
 
 networks:
   inception:
