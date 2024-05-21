@@ -13,6 +13,6 @@ USER user42
 
 COPY conf/my.cnf /etc/mysql/my.cnf
 
-ENTRYPOINT [ "mysqld" ]
+ENTRYPOINT [ "mysqld" "--user=user42"]
 
 EXPOSE 3306
