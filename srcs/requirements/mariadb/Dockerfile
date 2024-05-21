@@ -6,13 +6,9 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN groupadd -r user42 && useradd -r -g user42 user42
-RUN chown -R user42:user42 /var/lib/mysql
-
-USER user42
-
 COPY conf/my.cnf /etc/mysql/my.cnf
-
-ENTRYPOINT [ "mysqld" "--user=user42"]
+COPY conf/init.sql /tmp/init.sql
 
 EXPOSE 3306
+
+CMD ["mysqld", "--user=mysql", "--init-file=/tmp/init.sql"]
