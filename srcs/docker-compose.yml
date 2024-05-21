@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  mariadb:
+    container_name: mariadb
+    build: requirements/mariadb
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - mariadb_volume:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+
+volumes:
+  mariadb_volume:
+
+networks:
+  inception:
