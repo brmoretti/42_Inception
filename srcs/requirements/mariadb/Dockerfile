@@ -9,6 +9,8 @@ RUN apt-get update -y && \
 RUN groupadd -r user42 && useradd -r -g user42 user42
 RUN chown -R user42:user42 /var/lib/mysql
 
+USER user42
+
 COPY conf/my.cnf /etc/mysql/my.cnf
 
 ENTRYPOINT [ "mysqld" ]
