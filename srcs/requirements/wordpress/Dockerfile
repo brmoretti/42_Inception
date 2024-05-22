@@ -11,4 +11,4 @@ RUN chmod -R 755 /var/www/html/
 
 EXPOSE 9000
 
-CMD ["php", "-S", "0.0.0.0:80", "-t", "/var/www/html/"]
+CMD ["php", "-S", "0.0.0.0:9000", "-t", "/var/www/html/"]
