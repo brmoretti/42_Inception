@@ -1,5 +1,8 @@
 FROM debian:oldstable
 
+# dizer qual diretorio os comandos vao rodar
+WORKDIR /var/www/wordpress
+
 RUN apt-get update && apt-get install -y php php-mysql
 
 RUN apt-get install -y wget unzip

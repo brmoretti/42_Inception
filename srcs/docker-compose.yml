@@ -4,9 +4,12 @@ services:
   mariadb:
     container_name: mariadb
     build: requirements/mariadb
-    restart: always
-    ports:
-      - 3306:3306
+    env_file:
+      - .env
+    restart: on-failure
+    # pelo que vi basta export a porta no dockerfile e nao precisa no compose (so o nginx)
+    # ports:
+    #   - 3306:3306
     volumes:
       - mariadb_volume:/var/lib/mysql
     environment:
@@ -14,13 +17,15 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    networks:
+      - inception
 
   wordpress:
     container_name: wordpress
     build: requirements/wordpress
-    restart: always
-    ports:
-      - 9000:9000
+    restart: on-failure
+    # ports:
+    #   - 9000:9000
     volumes:
       - wordpress_volume:/var/www/html
     depends_on:
@@ -30,12 +35,14 @@ services:
       - WORDPRESS_DB_USER=${MYSQL_USER}
       - WORDPRESS_DB_PASSWORD=${MYSQL_PASSWORD}
       - WORDPRESS_DB_NAME=${MYSQL_DATABASE}
+    networks:
+      - inception
 
 
   nginx:
     container_name: nginx
     build: requirements/nginx
-    restart: always
+    restart: on-failure
     ports:
       - 443:443
     volumes:
@@ -45,6 +52,8 @@ services:
       - wordpress
     environment:
       - DOMAIN=${DOMAIN}
+    networks:
+      - inception
 
 volumes:
   mariadb_volume:
