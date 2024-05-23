@@ -24,8 +24,8 @@ services:
     container_name: wordpress
     build: requirements/wordpress
     restart: on-failure
-    # ports:
-    #   - 9000:9000
+    ports:
+      - 9000:9000
     volumes:
       - wordpress_volume:/var/www/html
     depends_on:
@@ -38,16 +38,14 @@ services:
     networks:
       - inception
 
-
   nginx:
     container_name: nginx
     build: requirements/nginx
     restart: on-failure
     ports:
       - 443:443
-    volumes:
-      - wordpress_volume:/var/www/html
-      # - ./requirements/nginx/ssl:/etc/ssl/certs
+    # volumes:
+    #   # - ./requirements/nginx/ssl:/etc/ssl/certs
     depends_on:
       - wordpress
     environment:
