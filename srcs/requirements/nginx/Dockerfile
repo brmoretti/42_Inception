@@ -1,17 +1,21 @@
 FROM debian:oldstable
 
-EXPOSE 443
-
 # Install Nginx
-RUN apt-get update -y && apt-get install -y nginx openssl
+RUN apt-get update -y
+RUN apt-get install -y
+RUN apt-get install nginx -y
+RUN apt-get install openssl -y
+
+# Generate a keys and certificates (SSL/TLS)
+RUN openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 365 \
+-keyout /etc/ssl/certs/localhost.key \
+-out /etc/ssl/certs/localhost.crt \
+-subj "/C=BR/ST=SP/L=Sao Paulo/O=42sp/CN=bmoretti.42.fr"
 
 # Copy Nginx configuration
 # a configuracao tem que ser copiada pra pasta conf.d do nginx
-COPY ./conf/nginx.conf /etc/nginx/conf.ds
-COPY ./tools/nginx_start.sh /var/www/nginx_start.sh
+COPY ./conf/nginx.conf /etc/nginx/conf.d
 
-RUN chmod +x /var/www/nginx_start.sh
-
-ENTRYPOINT ["/var/www/nginx_start.sh"]
+EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]
