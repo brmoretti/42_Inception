@@ -1,21 +1,22 @@
 FROM debian:oldstable
 
-# dizer qual diretorio os comandos vao rodar
-WORKDIR /var/www/wordpress
+WORKDIR /var/www/html/
 
-# php-fpm para que ele funcione isolado do servidor
-RUN apt-get update && apt-get install -y php-fpm php-mysql
+RUN apt update -y && \
+    apt upgrade -y && \
+    apt install php-fpm php-mysql mariadb-client wget -y
 
-# falta configurar o wordpress via linha de comando
-# e configurar o php para escutar a porta do world press 9000
+RUN wget https://wordpress.org/latest.tar.gz && \
+	tar -xzf latest.tar.gz && \
+	mv wordpress/* . && \
+	rm -rf wordpress && \
+	rm -rf latest.tar.gz
 
-
-RUN apt-get install -y wget unzip
-RUN wget -q https://wordpress.org/latest.zip && unzip latest.zip -d /var/www/html/
-RUN rm -f latest.zip
-
-RUN chown -R www-data:www-data /var/www
-RUN chmod -R 755 /var/www
+RUN cp wp-config-sample.php wp-config.php && \
+	sed -i "s/database_name_here/wordpress/g" wp-config.php && \
+	sed -i "s/username_here/user_wordpress/g" wp-config.php && \
+	sed -i "s/password_here/password/g" wp-config.php
+	# sed -i "s/localhost/mariadb/g" wp-config.php
 
 EXPOSE 9000
 
