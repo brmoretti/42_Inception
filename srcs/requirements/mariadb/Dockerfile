@@ -7,7 +7,12 @@ RUN apt-get update -y && \
     rm -rf /var/lib/apt/lists/*
 
 COPY conf/my.cnf /etc/mysql/my.cnf
-COPY conf/init.sql /tmp/init.sql
+
+RUN mariadb -u root -e \
+	"CREATE DATABASE IF NOT EXISTS $WORDPRESS_DATABASE; \
+	CREATE USER '$WORDPRESS_USER'@'%' identified by '$WORDPRESS_PASSWORD'; \
+	GRANT ALL ON wordpress_db.* TO '$WORDPRESS_USER'@'%' IDENTIFIED BY '$WORDPRESS_PASSWORD'; \
+	FLUSH PRIVILEGES;"
 
 EXPOSE 3306
 

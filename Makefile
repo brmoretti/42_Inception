@@ -1,3 +1,8 @@
+LOGIN=bmoretti
+VOLUMES_PATH=/home/${LOGIN}/data
+
+export VOLUMES_PATH
+
 all: host up
 
 host:
@@ -34,4 +39,7 @@ clean:
 fclean: clean
 	docker system prune --force --all --volumes
 
+setup: 
+	mkdir -p ${VOLUMES_PATH}/mariadb
+	mkdir -p ${VOLUMES_PATH}/wordpress
 
