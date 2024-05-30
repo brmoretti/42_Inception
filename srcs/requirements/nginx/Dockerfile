@@ -10,6 +10,9 @@ RUN openssl req -x509 -sha256 -nodes -newkey rsa:2048 -days 365 \
 
 COPY ./conf/nginx.conf /etc/nginx/conf.d
 
+RUN chmod 755 /var/www/html
+RUN chown -R www-data:www-data /var/www/html
+
 EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]
