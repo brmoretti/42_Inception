@@ -22,5 +22,5 @@ RUN service mariadb start && \
 
 EXPOSE 3306
 
-CMD ["mysqld_safe", "--user=mysql", "--init-file=/tmp/init.sql"]
+CMD ["mysqld_safe"]
 
