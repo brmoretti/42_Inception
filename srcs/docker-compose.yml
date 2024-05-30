@@ -11,12 +11,12 @@ services:
         - WORDPRESS_PASSWORD
     restart: on-failure
     volumes:
-      - mariadb_volume:/var/lib/mysql
+      - mariadb:/var/lib/mysql
     env_file:
       - .env
     networks:
       - inception
-
+  
   wordpress:
     container_name: wordpress
     build: 
@@ -29,7 +29,7 @@ services:
     env_file:
       - .env
     volumes:
-      - wordpress_volume:/var/www/html
+      - wordpress:/var/www/html
     depends_on:
       - mariadb
     networks:
@@ -37,7 +37,8 @@ services:
 
   nginx:
     container_name: nginx
-    build: requirements/nginx
+    build: 
+      context: requirements/nginx
     restart: on-failure
     ports:
       - 443:443
@@ -46,15 +47,15 @@ services:
     networks:
       - inception
     volumes:
-      - wordpress_volume:/var/www/html
+      - wordpress:/var/www/html
 
 volumes:
-  mariadb_volume:
+  mariadb:
     driver_opts:
         o: bind
         type: none
         device: ${VOLUMES_PATH}/mariadb
-  wordpress_volume:
+  wordpress:
       driver_opts:
         o: bind
         type: none

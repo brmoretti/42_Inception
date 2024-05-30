@@ -6,9 +6,7 @@ ARG WORDPRESS_PASSWORD
 
 RUN apt-get update -y && \
     apt-get upgrade -y && \
-    apt-get install mariadb-server -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install mariadb-server -y
 
 COPY conf/my.cnf /etc/mysql/my.cnf
 
