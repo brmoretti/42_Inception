@@ -3,38 +3,35 @@ version: '3'
 services:
   mariadb:
     container_name: mariadb
-    build: requirements/mariadb
-    env_file:
-      - .env
+    build: 
+      context: requirements/mariadb
+      args:
+        - WORDPRESS_DATABASE
+        - WORDPRESS_USER
+        - WORDPRESS_PASSWORD
     restart: on-failure
-    # pelo que vi basta export a porta no dockerfile e nao precisa no compose (so o nginx)
-    # ports:
-    #   - 3306:3306
     volumes:
       - mariadb_volume:/var/lib/mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE}
-      - MYSQL_USER=${MYSQL_USER}
-      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    env_file:
+      - .env
     networks:
       - inception
 
   wordpress:
     container_name: wordpress
-    build: requirements/wordpress
+    build: 
+      context: requirements/wordpress
+      args:
+        - WORDPRESS_DATABASE
+        - WORDPRESS_USER
+        - WORDPRESS_PASSWORD
     restart: on-failure
-    # ports:
-    #   - 9000:9000
+    env_file:
+      - .env
     volumes:
       - wordpress_volume:/var/www/html
     depends_on:
       - mariadb
-    environment:
-      - WORDPRESS_DB_HOST=mariadb:3306
-      - WORDPRESS_DB_USER=${MYSQL_USER}
-      - WORDPRESS_DB_PASSWORD=${MYSQL_PASSWORD}
-      - WORDPRESS_DB_NAME=${MYSQL_DATABASE}
     networks:
       - inception
 
@@ -44,18 +41,24 @@ services:
     restart: on-failure
     ports:
       - 443:443
-    # volumes:
-    #   # - ./requirements/nginx/ssl:/etc/ssl/certs
     depends_on:
       - wordpress
-    environment:
-      - DOMAIN=${DOMAIN}
     networks:
       - inception
+    volumes:
+      - wordpress_volume:/var/www/html
 
 volumes:
   mariadb_volume:
+    driver_opts:
+        o: bind
+        type: none
+        device: ${VOLUMES_PATH}/mariadb
   wordpress_volume:
+      driver_opts:
+        o: bind
+        type: none
+        device: ${VOLUMES_PATH}/wordpress
 
 networks:
   inception:
