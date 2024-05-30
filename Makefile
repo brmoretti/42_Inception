@@ -3,14 +3,12 @@ VOLUMES_PATH=/home/${LOGIN}/data
 
 export VOLUMES_PATH
 
-all: host up
+all: setup host up
 
 host:
-	@if ! grep -qFx "127.0.0.1 ${USER}.42.fr" /etc/hosts; then \
-		sudo sed -i '2i\127.0.0.1\t${USER}.42.fr' /etc/hosts; \
+	@if ! grep -q "${LOGIN}.42.fr" /etc/hosts; then \
+		sudo sed -i "2i\127.0.0.1\t${LOGIN}.42.fr" /etc/hosts; \
 	fi
-
-	export DOMAIN=bmoretti.42.fr
 
 DOCKER_COMPOSE_FILE=./srcs/docker-compose.yml
 DOCKER_COMPOSE_COMMAND=docker-compose -f $(DOCKER_COMPOSE_FILE)
@@ -38,8 +36,9 @@ clean:
 
 fclean: clean
 	docker system prune --force --all --volumes
+	sudo rm -rf ${VOLUMES_PATH}
 
 setup: 
-	mkdir -p ${VOLUMES_PATH}/mariadb
-	mkdir -p ${VOLUMES_PATH}/wordpress
+	sudo mkdir -p ${VOLUMES_PATH}/mariadb
+	sudo mkdir -p ${VOLUMES_PATH}/wordpress
 

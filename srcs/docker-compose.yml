@@ -3,7 +3,12 @@ version: '3'
 services:
   mariadb:
     container_name: mariadb
-    build: requirements/mariadb
+    build: 
+      context: requirements/mariadb
+      args:
+        - WORDPRESS_DATABASE
+        - WORDPRESS_USER
+        - WORDPRESS_PASSWORD
     restart: on-failure
     volumes:
       - mariadb_volume:/var/lib/mysql
@@ -14,7 +19,12 @@ services:
 
   wordpress:
     container_name: wordpress
-    build: requirements/wordpress
+    build: 
+      context: requirements/wordpress
+      args:
+        - WORDPRESS_DATABASE
+        - WORDPRESS_USER
+        - WORDPRESS_PASSWORD
     restart: on-failure
     env_file:
       - .env
@@ -35,18 +45,20 @@ services:
       - wordpress
     networks:
       - inception
+    volumes:
+      - wordpress_volume:/var/www/html
 
 volumes:
   mariadb_volume:
     driver_opts:
-      o: bind
-      type: none
-      device: ${VOLUMES_PATH}/mariadb
+        o: bind
+        type: none
+        device: ${VOLUMES_PATH}/mariadb
   wordpress_volume:
       driver_opts:
-      o: bind
-      type: none
-      device: ${VOLUMES_PATH}/wordpress
+        o: bind
+        type: none
+        device: ${VOLUMES_PATH}/wordpress
 
 networks:
   inception:

@@ -1,5 +1,9 @@
 FROM debian:oldstable
 
+ARG WORDPRESS_DATABASE
+ARG WORDPRESS_USER
+ARG WORDPRESS_PASSWORD
+
 WORKDIR /var/www/html/
 
 RUN apt update -y && \
@@ -13,9 +17,9 @@ RUN wget https://wordpress.org/latest.tar.gz && \
 	rm -rf latest.tar.gz
 
 RUN cp wp-config-sample.php wp-config.php && \
-	sed -i "s/database_name_here/wordpress/g" wp-config.php && \
-	sed -i "s/username_here/user_wordpress/g" wp-config.php && \
-	sed -i "s/password_here/password/g" wp-config.php
+	sed -i "s/database_name_here/${WORDPRESS_DATABASE}/g" wp-config.php && \
+	sed -i "s/username_here/${WORDPRESS_USER}/g" wp-config.php && \
+	sed -i "s/password_here/${WORDPRESS_PASSWORD}/g" wp-config.php
 	# sed -i "s/localhost/mariadb/g" wp-config.php
 
 EXPOSE 9000
