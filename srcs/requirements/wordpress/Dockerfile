@@ -1,5 +1,7 @@
 FROM debian:oldstable
 
+EXPOSE 9000
+
 ARG WORDPRESS_DATABASE
 ARG WORDPRESS_USER
 ARG WORDPRESS_PASSWORD
@@ -16,6 +18,8 @@ RUN sed -i.default "/^listen\s=.*/c\listen = 0.0.0.0:9000" \
 RUN wget https://wordpress.org/latest.tar.gz && \
 	tar -xzf latest.tar.gz && \
 	mv wordpress/* . && \
+	chown -R www-data:www-data /var/www/html && \
+	chmod 755 /var/www/html && \
 	rm -rf wordpress && \
 	rm -rf latest.tar.gz
 

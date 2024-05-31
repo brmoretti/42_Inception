@@ -3,12 +3,12 @@ version: '3'
 services:
   mariadb:
     container_name: mariadb
-    build: 
+    build:
       context: requirements/mariadb
       args:
-        - WORDPRESS_DATABASE
-        - WORDPRESS_USER
-        - WORDPRESS_PASSWORD
+        - WORDPRESS_DATABASE=${WORDPRESS_DATABASE}
+        - WORDPRESS_USER=${WORDPRESS_USER}
+        - WORDPRESS_PASSWORD=${WORDPRESS_PASSWORD}
     restart: on-failure
     volumes:
       - mariadb:/var/lib/mysql
@@ -16,15 +16,15 @@ services:
       - .env
     networks:
       - inception
-  
+
   wordpress:
     container_name: wordpress
-    build: 
+    build:
       context: requirements/wordpress
       args:
-        - WORDPRESS_DATABASE
-        - WORDPRESS_USER
-        - WORDPRESS_PASSWORD
+        - WORDPRESS_DATABASE=${WORDPRESS_DATABASE}
+        - WORDPRESS_USER=${WORDPRESS_USER}
+        - WORDPRESS_PASSWORD=${WORDPRESS_PASSWORD}
     restart: on-failure
     env_file:
       - .env
@@ -37,7 +37,7 @@ services:
 
   nginx:
     container_name: nginx
-    build: 
+    build:
       context: requirements/nginx
     restart: on-failure
     ports:
@@ -52,14 +52,14 @@ services:
 volumes:
   mariadb:
     driver_opts:
-        o: bind
-        type: none
-        device: ${VOLUMES_PATH}/mariadb
+      o: bind
+      type: none
+      device: ${VOLUMES_PATH}/mariadb
   wordpress:
-      driver_opts:
-        o: bind
-        type: none
-        device: ${VOLUMES_PATH}/wordpress
+    driver_opts:
+      o: bind
+      type: none
+      device: ${VOLUMES_PATH}/wordpress
 
 networks:
   inception:
