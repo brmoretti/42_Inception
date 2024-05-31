@@ -1,19 +1,22 @@
 #!/bin/bash
 
-wp --allow-root config create \
-	--dbname="$WORDPRESS_DATABASE" \
-	--dbuser="$WORDPRESS_USER" \
-	--dbpass="$WORDPRESS_PASSWORD" \
-	--dbhost=mariadb \
-	--dbprefix="wp_"
+
 
 wp core install --allow-root \
 	--path=/var/www/wordpress \
-	--title="$TITLE" \
+	--title="TESTESSSSSSSSETETSDFGSKFGJKSFDJGSJFKDG" \
 	--url=bmoretti.42.fr \
-	--admin_user=$WORDPRESS_USER \
-	--admin_password=$WORDPRESS_PASSWORD \
-	--admin_email=$bmoretti@email.com
+	--admin_user=admin \
+	--admin_password=admin \
+	--admin_email=email@email.com
+
+# wp core install --allow-root \
+# 	--path=/var/www/wordpress \
+# 	--title="$TITLE" \
+# 	--url=$LOGIN.42.fr \
+# 	--admin_user=$WORDPRESS_USER \
+# 	--admin_password=$WORDPRESS_PASSWORD \
+# 	--admin_email=email@email.com
 
 wp user create --allow-root	\
 	--path=/var/www/wordpress \
@@ -24,4 +27,4 @@ wp user create --allow-root	\
 # Activate the Twenty Twenty-Two theme.
 wp --allow-root theme activate twentytwentytwo
 
-exec php-fpm7.4 -F
+exec 
