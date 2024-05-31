@@ -3,7 +3,7 @@ VOLUMES_PATH=/home/${LOGIN}/data
 
 export VOLUMES_PATH
 
-all: setup host up
+all: setup up
 
 host:
 	@if ! grep -q "${LOGIN}.42.fr" /etc/hosts; then \
@@ -39,9 +39,9 @@ clean: host-clean
 
 fclean: clean
 	docker system prune --force --all --volumes
-	sudo rm -rf ${VOLUMES_PATH}
+	sudo rm -rf /home/${LOGIN}
 
-setup:
+setup: host
 	sudo mkdir -p ${VOLUMES_PATH}/mariadb
 	sudo mkdir -p ${VOLUMES_PATH}/wordpress
 
@@ -50,3 +50,5 @@ build-nginx:
 
 restart-nginx: build-nginx
 	$(DOCKER_COMPOSE_COMMAND) up -d nginx
+
+.PHONY: all up build build-no-cache down ps ls clean fclean setup host

@@ -8,20 +8,22 @@ WORKDIR /var/www/html/
 
 RUN apt update -y && \
     apt upgrade -y && \
-    apt install php-fpm php-mysql mariadb-client wget -y
+    apt install php7.4 php-fpm php-mysql mariadb-client wget -y
 
-RUN wget https://wordpress.org/latest.tar.gz && \
-	tar -xzf latest.tar.gz && \
-	mv wordpress/* . && \
-	rm -rf wordpress && \
-	rm -rf latest.tar.gz
+RUN wget -O /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+	&& chmod +x /usr/local/bin/wp \
+	&& wp core download --allow-root --path=/var/www/wordpress
 
-RUN cp wp-config-sample.php wp-config.php && \
-	sed -i "s/database_name_here/${WORDPRESS_DATABASE}/g" wp-config.php && \
-	sed -i "s/username_here/${WORDPRESS_USER}/g" wp-config.php && \
-	sed -i "s/password_here/${WORDPRESS_PASSWORD}/g" wp-config.php
-	# sed -i "s/localhost/mariadb/g" wp-config.php
+# Create the directory where php-fpm will store the pid file
+RUN mkdir /run/php
 
-EXPOSE 9000
+RUN chown -R www-data:www-data /var/www/wordpress \
+	&& chmod 755 /var/www/wordpress
 
-CMD ["php", "-S", "0.0.0.0:9000", "-t", "/var/www/html/"]
+COPY conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
+
+COPY tool/init.sh /tmp/wp_setup.sh
+
+RUN chmod 777 /tmp/wp_setup.sh
+
+ENTRYPOINT [ "/tmp/wp_setup.sh" ]
