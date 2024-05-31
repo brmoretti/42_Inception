@@ -11,7 +11,7 @@ host:
 	fi
 
 	@if [! -f ./srcs/.env ]; then \
-		wget -O ./srcs/.env https://raw.githubusercontent.com/brmoretti/42_Inception/main/srcs/.env \
+		wget -O ./srcs/.env https://raw.githubusercontent.com/brmoretti/42_Inception/main/srcs/.env; \
 	fi
 
 DOCKER_COMPOSE_FILE=./srcs/docker-compose.yml

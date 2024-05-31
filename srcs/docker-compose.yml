@@ -1,5 +1,24 @@
 version: '3'
 
+
+networks:
+  inception:
+
+volumes:
+  mariadb_volume:
+    name: mariadb_volume
+    driver_opts:
+      o: bind
+      type: none
+      device: ${VOLUMES_PATH}/mariadb
+
+  wordpress_volume:
+    name: wordpress_volume
+    driver_opts:
+      o: bind
+      type: none
+      device: ${VOLUMES_PATH}/wordpress
+
 services:
   mariadb:
     container_name: mariadb
@@ -9,13 +28,19 @@ services:
         - WORDPRESS_DATABASE=${WORDPRESS_DATABASE}
         - WORDPRESS_USER=${WORDPRESS_USER}
         - WORDPRESS_PASSWORD=${WORDPRESS_PASSWORD}
+    environment:
+      - WORDPRESS_DATABASE
+      - WORDPRESS_USER
+      - WORDPRESS_PASSWORD
     restart: on-failure
     volumes:
-      - mariadb:/var/lib/mysql
+      - mariadb_volume:/var/lib/mysql
     env_file:
       - .env
     networks:
       - inception
+    expose:
+      - 3306
 
   wordpress:
     container_name: wordpress
@@ -29,11 +54,13 @@ services:
     env_file:
       - .env
     volumes:
-      - wordpress:/var/www/html
+      - wordpress_volume:/var/www/wordpress
     depends_on:
       - mariadb
     networks:
       - inception
+    expose:
+      - 9000
 
   nginx:
     container_name: nginx
@@ -47,19 +74,4 @@ services:
     networks:
       - inception
     volumes:
-      - wordpress:/var/www/html
-
-volumes:
-  mariadb:
-    driver_opts:
-      o: bind
-      type: none
-      device: ${VOLUMES_PATH}/mariadb
-  wordpress:
-    driver_opts:
-      o: bind
-      type: none
-      device: ${VOLUMES_PATH}/wordpress
-
-networks:
-  inception:
+      - wordpress_volume:/var/www/wordpress
