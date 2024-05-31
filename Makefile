@@ -2,6 +2,7 @@ LOGIN=bmoretti
 VOLUMES_PATH=/home/${LOGIN}/data
 
 export VOLUMES_PATH
+export LOGIN
 
 all: setup up
 
