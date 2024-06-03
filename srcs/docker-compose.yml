@@ -75,3 +75,16 @@ services:
       - inception
     volumes:
       - wordpress_volume:/var/www/wordpress
+
+  redis:
+    container_name: redis
+    image: redis:42
+    init: true
+    build:
+      context: ./requirements/bonus/redis-cache
+      dockerfile: Dockerfile
+    networks:
+      - inception
+    restart: always
+    depends_on:
+      - nginx
