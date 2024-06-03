@@ -6,9 +6,13 @@ ARG WORDPRESS_PASSWORD
 
 WORKDIR /var/www/wordpress/
 
+# downloads for mandatory part
 RUN apt update -y && \
     apt upgrade -y && \
     apt install php7.4 php-fpm php-mysql mariadb-client wget -y
+
+# downloads for bonus part
+RUN apt -y install php7.4-redis redis-tools
 
 RUN wget -O /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
 	&& chmod +x /usr/local/bin/wp \

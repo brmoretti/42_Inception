@@ -71,6 +71,7 @@ services:
       - 443:443
     depends_on:
       - wordpress
+      - mariadb
     networks:
       - inception
     volumes:
