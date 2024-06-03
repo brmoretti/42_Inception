@@ -82,7 +82,7 @@ services:
     image: redis:42
     init: true
     build:
-      context: ./requirements/bonus/redis-cache
+      context: ./requirements/bonus/redis
       dockerfile: Dockerfile
     networks:
       - inception
