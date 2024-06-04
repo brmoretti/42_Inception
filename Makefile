@@ -60,6 +60,13 @@ clean: host-clean
 clean_bonus: host-clean
 	$(DOCKER_COMPOSE_COMMAND_BONUS) down --rmi all --volumes
 
+reset:
+	docker stop $$(docker ps -qa)
+	docker rm $$(docker ps -qa)
+	docker rmi -f $$(docker images -qa)
+	docker volume rm $$(docker volume ls -q)
+	docker network rm $$(docker network ls -q) 2>/dev/null
+
 fclean: clean clean_bonus
 	docker system prune --force --all --volumes
 	sudo rm -rf /home/${LOGIN}
