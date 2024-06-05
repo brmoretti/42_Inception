@@ -68,10 +68,27 @@ services:
       - 443:443
     depends_on:
       - wordpress
+      - redis
+      - mariadb
     networks:
       - inception
     volumes:
       - wordpress_volume:/var/www/wordpress
+
+  redis:
+    container_name: redis
+    build: ./requirements/redis
+    depends_on:
+      - wordpress
+    ports:
+      - '6379:6379'
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - wordpress_volume:/var/www/wordpress
+    networks:
+      - inception
 
   vsftpd:
     container_name: vsftpd

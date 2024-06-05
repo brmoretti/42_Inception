@@ -2,8 +2,10 @@ FROM debian:oldstable
 
 RUN apt update -y && \
     apt upgrade -y && \
-    apt install redis-server -y
+    apt install -y redis
 
-COPY conf/redis.conf /etc/redis/redis.conf
+COPY ./tool/redis.sh /tmp/redis.sh
 
-CMD ["redis-server", "/etc/redis/redis.conf"]
+EXPOSE 6379
+
+CMD ["sh", "/tmp/redis/redis.sh"]
