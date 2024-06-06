@@ -108,3 +108,18 @@ services:
     restart: on-failure
     depends_on:
       - nginx
+
+  cadvisor:
+    container_name: cadvisor
+    build:
+      context: requirements/cadvisor
+    networks:
+      - inception
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: always
