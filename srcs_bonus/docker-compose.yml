@@ -123,3 +123,15 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     restart: always
+
+  adminer:
+    container_name: adminer
+    build:
+      context: requirements/adminer
+    networks:
+      - inception
+    volumes:
+      - wordpress_volume:/var/www/html
+    restart: always
+    depends_on:
+      - wordpress
