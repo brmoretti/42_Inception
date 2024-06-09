@@ -51,7 +51,7 @@ services:
     env_file:
       - .env
     volumes:
-      - wordpress_volume:/var/www/wordpress
+      - wordpress_volume:/var/www/html
     depends_on:
       - mariadb
     networks:
@@ -73,7 +73,7 @@ services:
     networks:
       - inception
     volumes:
-      - wordpress_volume:/var/www/wordpress
+      - wordpress_volume:/var/www/html
 
   redis:
     container_name: redis
@@ -86,7 +86,7 @@ services:
     env_file:
       - .env
     volumes:
-      - wordpress_volume:/var/www/wordpress
+      - wordpress_volume:/var/www/html
     networks:
       - inception
 

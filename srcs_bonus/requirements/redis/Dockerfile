@@ -8,4 +8,4 @@ COPY ./tool/redis.sh /tmp/redis.sh
 
 EXPOSE 6379
 
-CMD ["sh", "/tmp/redis/redis.sh"]
+CMD ["sh", "/tmp/redis.sh"]
