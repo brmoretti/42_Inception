@@ -74,5 +74,6 @@ fclean: clean clean_bonus
 setup: host
 	sudo mkdir -p ${VOLUMES_PATH}/mariadb
 	sudo mkdir -p ${VOLUMES_PATH}/wordpress
+	sudo mkdir -p ${VOLUMES_PATH}/static
 
 .PHONY: all up build build-no-cache down ps ls clean fclean setup host
