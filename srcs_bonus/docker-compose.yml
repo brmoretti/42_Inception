@@ -16,6 +16,13 @@ volumes:
       type: none
       device: ${VOLUMES_PATH}/wordpress
 
+  static_volume:
+    name: static_volume
+    driver_opts:
+      o: bind
+      type: none
+      device: ${VOLUMES_PATH}/static
+
 services:
   mariadb:
     container_name: mariadb
