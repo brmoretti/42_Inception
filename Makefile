@@ -76,4 +76,32 @@ setup: host
 	sudo mkdir -p ${VOLUMES_PATH}/wordpress
 	sudo mkdir -p ${VOLUMES_PATH}/static
 
-.PHONY: all up build build-no-cache down ps ls clean fclean setup host
+prepare:	update compose
+
+update:
+			@echo "${YELLOW}-----Updating System----${NC}"
+			sudo apt -y update && sudo apt -y upgrade
+			@if [ $$? -eq 0 ]; then \
+				echo "${GREEN}-----System updated-----${NC}"; \
+				echo "${YELLOW}-----Installing Docker-----${NC}"; \
+				sudo apt -y install docker.io && sudo apt -y install docker-compose; \
+				if [ $$? -eq 0 ]; then \
+					echo "${GREEN}-----Docker and docker-compose installed-----${NC}"; \
+				else \
+					echo "${RED}-----Docker or docker-compose installation failed-----${NC}"; \
+				fi \
+			else \
+				echo "${RED}-----System update failed-----${NC}"; \
+			fi
+
+compose:
+			@echo "${YELLOW}-----Updating Docker Compose to V2-----${NC}"
+			sudo apt -y install curl
+			mkdir -p ${DOCKER_CONFIG}/cli-plugins
+			curl -SL https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-linux-x86_64 -o ${DOCKER_CONFIG}/cli-plugins/docker-compose
+			chmod +x ${DOCKER_CONFIG}/cli-plugins/docker-compose
+			sudo mkdir -p /usr/local/lib/docker/cli-plugins
+			sudo mv /home/${SYSTEM_USER}/.docker/cli-plugins/docker-compose /usr/local/lib/docker/cli-plugins/docker-compose
+			@echo "${GREEN}-----Docker Compose updated-----${NC}"
+
+.PHONY: all up build build-no-cache down ps ls clean fclean setup host update compose prepare
