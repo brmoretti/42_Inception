@@ -9,15 +9,21 @@ DOCKER_CONFIG = $(shell echo $$HOME/.docker)
 
 all: setup up
 
-bonus: setup up_bonus
+bonus: setup setup_bonus up_bonus
 
 host:
 	@if ! grep -q "${LOGIN}.42.fr" /etc/hosts; then \
 		sudo sed -i "2i\127.0.0.1\t${LOGIN}.42.fr" /etc/hosts; \
 	fi
 
+host_bonus:
+	@if ! grep -q "${LOGIN}.com" /etc/hosts; then \
+		sudo sed -i "2i\127.0.0.1\t${LOGIN}.com" /etc/hosts; \
+	fi
+
 host-clean:
 	sudo sed -i "/${LOGIN}.42.fr/d" /etc/hosts
+	sudo sed -i "/${LOGIN}.com/d" /etc/hosts
 
 DOCKER_COMPOSE_FILE=./srcs/docker-compose.yml
 DOCKER_COMPOSE_FILE_BONUS=./srcs_bonus/docker-compose.yml
@@ -77,8 +83,9 @@ fclean: clean clean_bonus
 setup: host
 	sudo mkdir -p ${VOLUMES_PATH}/mariadb
 	sudo mkdir -p ${VOLUMES_PATH}/wordpress
-	sudo mkdir -p ${VOLUMES_PATH}/static
 
+setup_bonus: host_bonus
+	
 prepare:	update compose
 
 update:

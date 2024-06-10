@@ -16,13 +16,6 @@ volumes:
       type: none
       device: ${VOLUMES_PATH}/wordpress
 
-  static_volume:
-    name: static_volume
-    driver_opts:
-      o: bind
-      type: none
-      device: ${VOLUMES_PATH}/static
-
 services:
   mariadb:
     container_name: mariadb
@@ -144,22 +137,11 @@ services:
       - wordpress
 
   static:
+    image: site
     build:
-      context: .
-      dockerfile: requirements/static-website/Dockerfile
-    container_name: website
-    ports:
-      - "80:80"
-    restart: always
-  # static:
-  #   container_name: static
-  #   image: static:42
-  #   init: true
-  #   build:
-  #     context: ./requirements/static-website
-  #     dockerfile: Dockerfile
-  #   networks:
-  #     - inception
-  #   volumes:
-  #     - static_volume:/var/www/html
-  #   restart: always
+      context: requirements/static-website
+    container_name: site
+    networks:
+      - inception
+    restart:
+      always
