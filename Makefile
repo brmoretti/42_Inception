@@ -4,6 +4,9 @@ VOLUMES_PATH=/home/${LOGIN}/data
 export VOLUMES_PATH
 export LOGIN
 
+SYSTEM_USER = $(shell echo $$USER)
+DOCKER_CONFIG = $(shell echo $$HOME/.docker)
+
 all: setup up
 
 bonus: setup up_bonus
