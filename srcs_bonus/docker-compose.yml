@@ -135,3 +135,16 @@ services:
     restart: always
     depends_on:
       - wordpress
+
+  static:
+    container_name: static
+    image: static:42
+    init: true
+    build:
+      context: ./requirements/static-website
+      dockerfile: Dockerfile
+    networks:
+      - inception
+    volumes:
+      - static:/usr/src/app
+    restart: always
