@@ -153,5 +153,5 @@ services:
     networks:
       - inception
     volumes:
-      - static:/var/www/html
+      - static_volume:/var/www/html
     restart: always
