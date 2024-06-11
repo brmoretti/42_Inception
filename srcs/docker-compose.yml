@@ -77,7 +77,7 @@ services:
 
   redis:
     container_name: redis
-    build: ./requirements/redis
+    build: requirements/bonus/redis
     depends_on:
       - wordpress
     ports:
@@ -93,7 +93,7 @@ services:
   vsftpd:
     container_name: vsftpd
     build:
-      context: requirements/vsftpd
+      context: requirements/bonus/vsftpd
       args:
         - FTP_USER
         - FTP_PASSWORD
@@ -112,7 +112,7 @@ services:
   cadvisor:
     container_name: cadvisor
     build:
-      context: requirements/cadvisor
+      context: requirements/bonus/cadvisor
     networks:
       - inception
     ports:
@@ -127,7 +127,7 @@ services:
   adminer:
     container_name: adminer
     build:
-      context: requirements/adminer
+      context: requirements/bonus/adminer
     networks:
       - inception
     volumes:
@@ -139,7 +139,7 @@ services:
   static:
     container_name: website
     build: 
-      context: requirements/static-website
+      context: requirements/bonus/static-website
     image: website:42
     ports:
       - "3000:3000"
