@@ -1,10 +1,13 @@
-FROM alpine:3.17
+FROM debian:oldstable
 
-COPY ./conf/nginx.conf /etc/nginx/nginx.conf
+RUN apt update -y
 
-RUN mkdir -p /var/www/site
-COPY ./tools/ /var/www/site/
+RUN apt install nodejs npm -y
 
-RUN apk update && apk add --no-cache nginx
+COPY ./tools /home/app
 
-ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
+WORKDIR /home/app
+
+RUN npm init -y && npm install express -y
+
+CMD ["node", "server.js"]

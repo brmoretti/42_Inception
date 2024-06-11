@@ -137,11 +137,12 @@ services:
       - wordpress
 
   static:
-    image: site
-    build:
+    container_name: website
+    build: 
       context: requirements/static-website
-    container_name: site
+    image: website:42
+    ports:
+      - "3000:3000"
     networks:
       - inception
-    restart:
-      always
+    restart: always
