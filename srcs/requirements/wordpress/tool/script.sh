@@ -11,7 +11,7 @@ wp --allow-root config create \
 wp core install --allow-root \
 	--path=/var/www/html \
 	--title="Inception" \
-	--url=vde-frei.42.fr \
+	--url=bmoretti.42.fr \
 	--admin_user=$WORDPRESS_USER \
 	--admin_password=$WORDPRESS_PASSWORD \
 	--admin_email=user@email.com
