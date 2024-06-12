@@ -3,4 +3,5 @@
 !*.*
 !Makefile
 !Dockerfile
-*.pdf
+.env
+to_vog

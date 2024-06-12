@@ -51,7 +51,7 @@ services:
     env_file:
       - .env
     volumes:
-      - wordpress_volume:/var/www/wordpress
+      - wordpress_volume:/var/www/html
     depends_on:
       - mariadb
     networks:
@@ -68,7 +68,81 @@ services:
       - 443:443
     depends_on:
       - wordpress
+      - redis
+      - mariadb
     networks:
       - inception
     volumes:
-      - wordpress_volume:/var/www/wordpress
+      - wordpress_volume:/var/www/html
+
+  redis:
+    container_name: redis
+    build: requirements/bonus/redis
+    depends_on:
+      - wordpress
+    ports:
+      - '6379:6379'
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - wordpress_volume:/var/www/html
+    networks:
+      - inception
+
+  vsftpd:
+    container_name: vsftpd
+    build:
+      context: requirements/bonus/vsftpd
+      args:
+        - FTP_USER
+        - FTP_PASSWORD
+    networks:
+      - inception
+    volumes:
+      - wordpress_volume:/home/$FTP_USER/ftp
+    ports:
+      - "20:20"
+      - "21:21"
+      - "21000-21010:21000-21010"
+    restart: on-failure
+    depends_on:
+      - nginx
+
+  cadvisor:
+    container_name: cadvisor
+    build:
+      context: requirements/bonus/cadvisor
+    networks:
+      - inception
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: always
+
+  adminer:
+    container_name: adminer
+    build:
+      context: requirements/bonus/adminer
+    networks:
+      - inception
+    volumes:
+      - wordpress_volume:/var/www/html
+    restart: always
+    depends_on:
+      - wordpress
+
+  static:
+    container_name: website
+    build: 
+      context: requirements/bonus/static-website
+    image: website:42
+    ports:
+      - "3000:3000"
+    networks:
+      - inception
+    restart: always

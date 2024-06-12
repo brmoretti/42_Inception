@@ -1,4 +1,4 @@
-FROM	debian:oldstable
+FROM debian:oldstable
 
 ARG WORDPRESS_DATABASE
 ARG WORDPRESS_USER
