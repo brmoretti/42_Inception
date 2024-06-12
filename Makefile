@@ -1,4 +1,4 @@
-LOGIN=bmoretti
+LOGIN=vde-frei
 VOLUMES_PATH=/home/${LOGIN}/data
 
 export VOLUMES_PATH
